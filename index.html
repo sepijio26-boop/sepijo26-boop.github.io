@@ -3,74 +3,201 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>فرم داده</title>
+<title>بازی X/O</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
   body {
     font-family: Tahoma, sans-serif;
-    background: var(--tg-theme-bg-color, #ffffff);
-    color: var(--tg-theme-text-color, #000000);
+    background: #111;
+    color: #fff;
+    text-align: center;
     padding: 20px;
     margin: 0;
   }
-  h2 { text-align: center; }
-  label { display: block; margin-top: 15px; font-size: 14px; }
-  input, textarea {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    font-size: 16px;
+  h2 { margin-bottom: 5px; }
+  #status { margin: 10px 0; font-size: 15px; color: #aaa; }
+
+  #board {
+    display: grid;
+    grid-template-columns: repeat(3, 90px);
+    grid-template-rows: repeat(3, 90px);
+    gap: 8px;
+    justify-content: center;
+    margin: 20px auto;
   }
+  .cell {
+    background: #222;
+    border-radius: 10px;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .cell.x { color: #4fc3f7; }
+  .cell.o { color: #ff8a65; }
+
   button {
-    margin-top: 25px;
-    width: 100%;
-    padding: 14px;
-    background: var(--tg-theme-button-color, #2481cc);
-    color: var(--tg-theme-button-text-color, #ffffff);
+    padding: 14px 20px;
+    font-size: 16px;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
+    background: #2481cc;
+    color: #fff;
+    margin: 8px 5px;
     cursor: pointer;
+  }
+  button:disabled { background: #555; }
+
+  #leaderboard {
+    margin-top: 30px;
+    text-align: right;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #leaderboard table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  #leaderboard td, #leaderboard th {
+    padding: 6px;
+    border-bottom: 1px solid #333;
+    font-size: 14px;
   }
 </style>
 </head>
 <body>
 
-<h2>ارسال اطلاعات</h2>
+<h2>❌⭕ بازی دو نفره</h2>
+<div id="status">برای شروع، وارد صف شو</div>
 
-<label for="name">نام</label>
-<input type="text" id="name" placeholder="نام خود را وارد کنید">
+<button id="queueBtn" onclick="joinQueue()">ورود به صف</button>
 
-<label for="message">پیام</label>
-<textarea id="message" rows="4" placeholder="پیام خود را بنویسید"></textarea>
+<div id="board"></div>
 
-<button onclick="sendData()">ارسال</button>
+<div id="leaderboard">
+  <h3>🏆 لیدربورد</h3>
+  <table id="lbTable"></table>
+</div>
 
 <script>
-  const tg = window.Telegram.WebApp;
-  tg.ready();
-  tg.expand();
+const tg = window.Telegram.WebApp;
+tg.ready();
+tg.expand();
 
-  function sendData() {
-    const name = document.getElementById('name').value.trim();
-    const message = document.getElementById('message').value.trim();
+// آدرس سرور Flask روی گوشی (بعد از گرفتن لینک ngrok، اینجا جایگزین کن)
+const SERVER_URL = "https://YOUR-NGROK-LINK.ngrok-free.app";
 
-    if (!name || !message) {
-      tg.showAlert('لطفاً همه فیلدها را پر کنید.');
-      return;
+const userId = tg.initDataUnsafe?.user?.id || "guest_" + Math.floor(Math.random() * 100000);
+const userName = tg.initDataUnsafe?.user?.first_name || "بازیکن";
+
+let gameId = null;
+let mySymbol = null;
+let pollTimer = null;
+
+const boardEl = document.getElementById("board");
+const statusEl = document.getElementById("status");
+const queueBtn = document.getElementById("queueBtn");
+
+function renderBoard(board, clickable) {
+  boardEl.innerHTML = "";
+  board.forEach((val, i) => {
+    const cell = document.createElement("div");
+    cell.className = "cell" + (val === "X" ? " x" : val === "O" ? " o" : "");
+    cell.textContent = val;
+    if (clickable && val === "") {
+      cell.onclick = () => makeMove(i);
     }
+    boardEl.appendChild(cell);
+  });
+}
 
-    const payload = {
-      name: name,
-      message: message
-    };
+function joinQueue() {
+  queueBtn.disabled = true;
+  statusEl.textContent = "در حال جستجوی حریف...";
 
-    // این داده مستقیم به ربات پایتون فرستاده میشه
-    tg.sendData(JSON.stringify(payload));
-  }
+  fetch(SERVER_URL + "/join_queue", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user_id: userId, name: userName })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.status === "matched") {
+      gameId = data.game_id;
+      statusEl.textContent = "حریف پیدا شد! بازی شروع شد.";
+    }
+    startPolling();
+  });
+}
+
+function startPolling() {
+  if (pollTimer) clearInterval(pollTimer);
+  pollTimer = setInterval(checkStatus, 1500);
+  checkStatus();
+}
+
+function checkStatus() {
+  fetch(SERVER_URL + "/status?user_id=" + userId)
+    .then(r => r.json())
+    .then(data => {
+      if (data.status === "waiting") {
+        statusEl.textContent = "در انتظار حریف...";
+        return;
+      }
+      if (data.status === "not_found") {
+        return;
+      }
+
+      // یعنی یک آبجکت بازی برگشته
+      gameId = data.id;
+      mySymbol = (data.player_x == userId) ? "X" : "O";
+      const isMyTurn = data.turn === mySymbol && data.status === "playing";
+
+      renderBoard(data.board, isMyTurn);
+
+      if (data.status === "playing") {
+        statusEl.textContent = isMyTurn ? "نوبت توئه!" : "منتظر حریف...";
+      } else if (data.status === "finished") {
+        clearInterval(pollTimer);
+        if (data.winner === "draw") {
+          statusEl.textContent = "مساوی شد!";
+        } else if (data.winner === mySymbol) {
+          statusEl.textContent = "بردی! 🎉 +۳ امتیاز";
+        } else {
+          statusEl.textContent = "باختی. دوباره امتحان کن!";
+        }
+        queueBtn.disabled = false;
+        loadLeaderboard();
+      }
+    });
+}
+
+function makeMove(cell) {
+  fetch(SERVER_URL + "/move", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ game_id: gameId, user_id: userId, cell: cell })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.error) return;
+    renderBoard(data.board, data.turn === mySymbol && data.status === "playing");
+  });
+}
+
+function loadLeaderboard() {
+  fetch(SERVER_URL + "/leaderboard")
+    .then(r => r.json())
+    .then(list => {
+      const table = document.getElementById("lbTable");
+      table.innerHTML = "<tr><th>بازیکن</th><th>امتیاز</th></tr>" +
+        list.map(p => `<tr><td>${p.name}</td><td>${p.score}</td></tr>`).join("");
+    });
+}
+
+loadLeaderboard();
 </script>
 
 </body>
