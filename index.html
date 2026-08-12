@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فرم داده</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  body {
+    font-family: Tahoma, sans-serif;
+    background: var(--tg-theme-bg-color, #ffffff);
+    color: var(--tg-theme-text-color, #000000);
+    padding: 20px;
+    margin: 0;
+  }
+  h2 { text-align: center; }
+  label { display: block; margin-top: 15px; font-size: 14px; }
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+  button {
+    margin-top: 25px;
+    width: 100%;
+    padding: 14px;
+    background: var(--tg-theme-button-color, #2481cc);
+    color: var(--tg-theme-button-text-color, #ffffff);
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<h2>ارسال اطلاعات</h2>
+
+<label for="name">نام</label>
+<input type="text" id="name" placeholder="نام خود را وارد کنید">
+
+<label for="message">پیام</label>
+<textarea id="message" rows="4" placeholder="پیام خود را بنویسید"></textarea>
+
+<button onclick="sendData()">ارسال</button>
+
+<script>
+  const tg = window.Telegram.WebApp;
+  tg.ready();
+  tg.expand();
+
+  function sendData() {
+    const name = document.getElementById('name').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if (!name || !message) {
+      tg.showAlert('لطفاً همه فیلدها را پر کنید.');
+      return;
+    }
+
+    const payload = {
+      name: name,
+      message: message
+    };
+
+    // این داده مستقیم به ربات پایتون فرستاده میشه
+    tg.sendData(JSON.stringify(payload));
+  }
+</script>
+
+</body>
+</html>
