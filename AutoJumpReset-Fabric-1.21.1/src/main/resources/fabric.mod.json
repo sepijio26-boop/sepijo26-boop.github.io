@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "autojumpreset",
+  "version": "${version}",
+  "name": "Auto Jump Reset",
+  "description": "Force-resets the Auto Jump option to OFF every tick (client-side QoL mod).",
+  "authors": ["you"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["com.autojumpreset.AutoJumpResetClient"]
+  },
+  "mixins": [
+    { "config": "autojumpreset.mixins.json", "environment": "client" }
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "~1.21.1"
+  }
+}

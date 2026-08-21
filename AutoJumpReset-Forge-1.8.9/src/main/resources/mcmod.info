@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "autojumpreset",
+    "name": "Auto Jump Reset",
+    "description": "Force-resets the Auto Jump option to OFF every tick (client-side QoL mod).",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["you"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
