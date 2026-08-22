@@ -1,0 +1,110 @@
+# ============================================================
+#  Clans plugin configuration
+# ============================================================
+# New clans start public (players can /clan join <name>).
+default-public: true
+
+# New clans start with clan PvP enabled (members can fight each other).
+# The owner and OGs are always protected from clan member attacks,
+# even when PvP is on.
+default-pvp: true
+
+# ------------------------------------------------------------
+# Clan tag colours.
+#   cost   - Vault price, 0 = free (Vault is required for paid colours)
+#   legacy - color code used in chat messages (&c = red, ...)
+#   chat   - Bukkit ChatColor enum name used for the name-tag colour
+# Free colours: red, blue, yellow
+# ------------------------------------------------------------
+colors:
+  red:
+    cost: 0
+    legacy: "&c"
+    chat: RED
+  blue:
+    cost: 0
+    legacy: "&9"
+    chat: BLUE
+  yellow:
+    cost: 0
+    legacy: "&e"
+    chat: YELLOW
+  green:
+    cost: 20000
+    legacy: "&a"
+    chat: GREEN
+  gold:
+    cost: 25000
+    legacy: "&6"
+    chat: GOLD
+  aqua:
+    cost: 30000
+    legacy: "&b"
+    chat: AQUA
+  purple:
+    cost: 35000
+    legacy: "&5"
+    chat: DARK_PURPLE
+  pink:
+    cost: 40000
+    legacy: "&d"
+    chat: LIGHT_PURPLE
+  white:
+    cost: 50000
+    legacy: "&f"
+    chat: WHITE
+  gray:
+    cost: 75000
+    legacy: "&7"
+    chat: GRAY
+
+# ------------------------------------------------------------
+# Clan invites
+# ------------------------------------------------------------
+invite:
+  # How long a pending invite stays valid (minutes).
+  expiry-minutes: 10
+
+# ------------------------------------------------------------
+# Kick cooldown
+# ------------------------------------------------------------
+# A player kicked from a PUBLIC clan cannot join again for this long
+# (days), unless the owner invites them again.
+kick-cooldown-days: 7
+
+# ------------------------------------------------------------
+# Taxes
+# ------------------------------------------------------------
+# Every <interval-minutes>, <tax> is processed for every non-OG member:
+#   mode: salary  (default) - the clan VAULT pays <tax> to each member;
+#                             the OGs additionally split <og-percent> of
+#                             every payment.
+#   mode: collect           - every non-OG member pays <tax> into the clan
+#                             vault; the OGs split <og-percent> of the
+#                             collected amount.
+# The owner is notified of every collection cycle.
+tax:
+  mode: salary
+  interval-minutes: 60
+  og-percent: 20.0
+  # The owner is never part of the tax cycle of their own clan.
+  exempt-owner: true
+
+# ------------------------------------------------------------
+# Tag display
+#   {name}  = player name
+#   {tag}   = coloured clan tag, e.g. &c[SEPI]
+#   {message} = chat message (chat.format only)
+# ------------------------------------------------------------
+chat:
+  enabled: true
+  format: "{name} {tag}: {message}"
+
+tab:
+  enabled: true
+  format: "{name} {tag}"
+
+# The name tag above a player's head shows ONLY the clan colour
+# (no tag text). Requires no extra plugins.
+nametag:
+  enabled: true

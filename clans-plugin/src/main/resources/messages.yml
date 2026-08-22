@@ -1,0 +1,143 @@
+# ============================================================
+#  Clans plugin messages (English)
+#  Prefix: &9Clan:
+#  Style: blue / green with pink (&d) highlights
+#  Placeholders: {player} {clan} {color} {cost} {amount} {target}
+#                {rank} {members} {status} {number} {count}
+#  Message lists can use getStringList inside the plugin for help.
+# ============================================================
+
+prefix: "&9Clan: &b"
+
+# ------------------------------------------------------------
+# Errors
+# ------------------------------------------------------------
+error:
+  no-permission: "&cYou don't have permission to do that."
+  must-be-player: "&cYou must be a player to use this command."
+  no-clan: "&cYou are not in a clan."
+  already-in-clan: "&cYou are already in a clan! Leave it first."
+  name-invalid: "&cInvalid clan name! Use 2-4 letters/numbers/# (letters are uppercased)."
+  name-taken: "&cThat clan name is already taken: &d[{clan}]"
+  color-invalid: "&cUnknown colour '&d{color}&c'. Use /clan colors."
+  color-already: "&cYour clan already has the &d{color}&c colour."
+  economy-unavailable: "&cThe economy is not available. Install &dVault&c to buy colours."
+  insufficient-funds: "&cYou need &d{amount}&c to do that."
+  clan-not-found: "&cClan '&d{clan}&c' was not found."
+  clan-private: "&c[{clan}] &cis private. You need an invite &7(/clan accept)&c."
+  kicked-cooldown: "&cYou were kicked from &d[{clan}]&c and can't join for &d{amount}&c more minutes! You can only rejoin if the owner invites you."
+  player-not-found: "&cPlayer '&d{player}&c' was not found."
+  target-in-clan: "&c{player} is already in a clan."
+  cannot-invite-self: "&cYou can't invite yourself!"
+  cannot-invite-self-owner: "&cYou can't invite yourself!"
+  no-invite: "&cYou don't have a pending clan invite."
+  owner-must-disband: "&cThe owner cannot leave. Use &d/clan disband&c instead."
+  owner-only: "&cOnly the clan owner can do that."
+  cannot-kick-self: "&cYou can't kick yourself!"
+  target-not-in-clan: "&c{player} is not in your clan."
+  rank-invalid: "&cUnknown rank '&d{rank}&c'. Use &dadmin&c or &dog&c."
+  already-rank: "&c{player} is already &d{rank}&c."
+  cannot-promote-owner: "&cThe clan owner can't be promoted."
+  cannot-demote-owner: "&cThe clan owner can't be demoted."
+  not-promoted: "&c{player} is a normal member, nothing to demote."
+  amount-positive: "&cAmount must be a positive number."
+  vault-insufficient: "&cThe clan vault only has &d{amount}&c."
+  economy-transfer-failed: "&cCould not transfer the money."
+
+# ------------------------------------------------------------
+# Success messages
+# ------------------------------------------------------------
+clan:
+  created: "&aClan &d[{clan}]&a created! You are the owner. Colour: &d{color} &a(cost &d{cost}&a)."
+  joined: "&aYou joined clan &d[{clan}]&a!"
+  left: "&aYou left your clan."
+  disbanded: "&aYour clan was disbanded."
+  kicked: "&aYou kicked &d{target}&a from the clan."
+  invite-sent: "&aInvite sent to &d{target}&a for clan &d[{clan}]&a."
+  invite-received: "&d{inviter}&b invited you to join clan &d[{clan}]&b!"
+  invite-accepted: "&aYou accepted the invite and joined &d[{clan}]&a!"
+  invite-declined: "&aYou declined the invite."
+  pvp-on: "&aClan PvP is now &aon&a. Members can fight each other (owner/OG are protected)."
+  pvp-off: "&aClan PvP is now &coff&a. Clan members can't damage each other."
+  tax-on: "&aClan tax is now &d{amount}&a per member per hour."
+  tax-off: "&aClan tax is now off."
+  public-on: "&aYour clan is now &aPUBLIC&a. Players can join with &d/clan join&a."
+  public-off: "&aYour clan is now &cPRIVATE&a. Players can only join by invite."
+  promoted: "&a{target} &ais now &d{rank}&a."
+  demoted: "&a{target} &ais now a &dMember&a."
+  color-changed: "&aClan colour changed to &d{color}&a!"
+  vault-deposit: "&aDeposited &d{amount}&a into the clan vault."
+  vault-withdraw: "&aWithdrew &d{amount}&a from the clan vault."
+  colors-free: "&aFREE"
+  colors-header: "&9Clan: &bAvailable clan colours:"
+  colors-entry: "&9Clan: &7- {color} &8- &b{cost}"
+  list-header: "&9Clan: &bClans &7({count})&b:"
+  list-entry: "&9Clan: &7{number}) {clan} &8- &7{members} members &8- &7{status}"
+
+# ------------------------------------------------------------
+# Info / vault
+# ------------------------------------------------------------
+info:
+  header: "&9Clan: &b[{clan}] &8| &dColour: &b{color} &8| &dOwner: &b{owner} &8| &dMembers: &b{members} &8| &dPvP: &b{pvp} &8| &dTax: &b{tax} &8| &dStatus: &b{status} &8| &dVault: &b{vault}"
+  member: "&9Clan: &7- &f{name} &8(&d{rank}&8)"
+  "on": "&aon"
+  "off": "&coff"
+  public: "&apublic"
+  private: "&cprivate"
+
+vault:
+  info: "&9Clan: &bVault: &d{vault} &8| &bTax: &d{tax} &8| &bCollected every &d{interval}&b min"
+  tax-off: "&7(off)"
+
+# ------------------------------------------------------------
+# Taxes
+# ------------------------------------------------------------
+tax:
+  summary: "&9Clan: &bTax processed: &d{amount}&b for &d{paid}&b members (&c{failed}&b failed). OG share: &d{og}&b. Per member: &d{tax}&b."
+
+# ------------------------------------------------------------
+# Invites / misc
+# ------------------------------------------------------------
+invite:
+  reminder: "&bYou have a pending clan invite! Use &d/clan accept&b or click the buttons in chat."
+
+command:
+  reloaded: "&aConfiguration and messages reloaded."
+
+# ------------------------------------------------------------
+# Usage
+# ------------------------------------------------------------
+usage:
+  create: "&9Clan: &bUsage: &d/clan create <name> <color>"
+  join: "&9Clan: &bUsage: &d/clan join <clan>"
+  kick: "&9Clan: &bUsage: &d/clan kick <player>"
+  invite: "&9Clan: &bUsage: &d/clan invite <player>"
+  pvp: "&9Clan: &bUsage: &d/clan pvp <on|off>"
+  tax: "&9Clan: &bUsage: &d/clan tax <amount|off>"
+  promote: "&9Clan: &bUsage: &d/clan promote <player> <admin|og>"
+  demote: "&9Clan: &bUsage: &d/clan demote <player>"
+  color: "&9Clan: &bUsage: &d/clan color <color>"
+  deposit: "&9Clan: &bUsage: &d/clan deposit <amount>"
+  withdraw: "&9Clan: &bUsage: &d/clan withdraw <amount>"
+  help: "&9Clan: &bUsage: &d/clan help"
+
+# ------------------------------------------------------------
+# Help
+# ------------------------------------------------------------
+help:
+  lines:
+    - "&8&m                                        "
+    - "&9Clan: &b&lCLAN HELP &8- &7Hypixel style clan plugin"
+    - "&9Clan: &b/clan create <name> <color> &8- &7create a clan (2-4 chars, # and numbers ok)"
+    - "&9Clan: &b/clan colors &8- &7see colours and prices &d(red/blue/yellow are free)"
+    - "&9Clan: &b/clan join <clan> &8- &7join a public clan"
+    - "&9Clan: &b/clan accept &8/&b decline &8- &7accept or decline an invite (or click the button)"
+    - "&9Clan: &b/clan invite <player> / kick <player> &8- &7owner only"
+    - "&9Clan: &b/clan pvp <on|off> &8- &7default ON &7(owner/OG always protected)"
+    - "&9Clan: &b/clan tax <amount|off> &8- &7hourly tax, 80% vault / 20% OG"
+    - "&9Clan: &b/clan public | private &8- &7join mode"
+    - "&9Clan: &b/clan promote <player> <admin|og> / demote <player> &8- &7owner only"
+    - "&9Clan: &b/clan color <color> &8- &7change the tag colour"
+    - "&9Clan: &b/clan deposit <amount> / withdraw <amount> / vault"
+    - "&9Clan: &b/clan info [clan] / list / leave / disband"
+    - "&8&m                                        "

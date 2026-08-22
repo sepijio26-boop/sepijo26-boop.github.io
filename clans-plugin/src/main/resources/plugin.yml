@@ -1,0 +1,24 @@
+name: Clans
+version: 1.0.0
+main: me.sepi.clans.ClansPlugin
+api-version: '1.21'
+authors: [Sepi]
+description: Create, manage and customise clans with coloured tags in chat, tab and name tags.
+website: https://github.com/sepijio26-boop/sepijo26-boop.github.io
+
+commands:
+  clan:
+    description: Clan commands.
+    usage: /clan help
+    aliases: [clans]
+    permission: clans.use
+
+permissions:
+  clans.use:
+    description: Allows using the /clan command.
+    default: true
+  clans.admin:
+    description: Allows reloading the plugin (/clan reload).
+    default: op
+
+softdepend: [Vault]

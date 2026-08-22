@@ -1,0 +1,11 @@
+package net.milkbowl.vault.economy;
+import org.bukkit.OfflinePlayer;
+public interface Economy {
+    boolean isEnabled();
+    String getName();
+    double getBalance(OfflinePlayer player);
+    boolean has(OfflinePlayer player, double amount);
+    EconomyResponse withdrawPlayer(OfflinePlayer player, double amount);
+    EconomyResponse depositPlayer(OfflinePlayer player, double amount);
+    String format(double amount);
+}
